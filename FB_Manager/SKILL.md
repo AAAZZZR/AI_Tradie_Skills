@@ -37,6 +37,7 @@ Extract from the user message:
 **Never publish without user confirmation.**
 
 Before drafting, read {baseDir}/references/style-guide.md and apply all rules.
+
 If source language differs from target, translate with these rules:
 - Preserve meaning, intent, hashtags
 - Adapt idioms naturally, do not translate literally
