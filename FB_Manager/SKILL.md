@@ -88,6 +88,7 @@ node {baseDir}/scripts/fb-post.js --type image --message "content" --image-url "
 ### 4. Report result
 
 - Show the post ID
+- **Build a clickable URL** from the post ID: `https://www.facebook.com/{META_PAGE_ID}/posts/{post_part}` where `{post_part}` is the portion after the underscore in the post ID (e.g. post ID `123_456` → `https://www.facebook.com/123/posts/456`)
 - Confirm comment was posted (if link-in-comment)
 - Confirm scheduled time (if scheduled)
 - On error, show the message and suggest a fix
