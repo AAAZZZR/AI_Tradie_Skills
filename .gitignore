@@ -1,0 +1,8 @@
+# 生成的輸出檔案不進 git
+**/output/
+*.mp3
+*.mp4
+*.wav
+
+# 系統檔
+.DS_Store
