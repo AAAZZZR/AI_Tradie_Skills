@@ -1,0 +1,26 @@
+{
+  "default_language": "zh-TW",
+  "max_articles_per_run": 100,
+  "max_age_hours": 168,
+  "rss_feeds": {
+    "hacker_news": [
+      "https://news.ycombinator.com/rss"
+    ],
+    "dev_community": [
+      "https://dev.to/feed",
+      "https://lobste.rs/rss"
+    ],
+    "ai": [
+      "https://openai.com/blog/rss.xml",
+      "https://blog.google/technology/ai/rss/",
+      "https://feeds.feedburner.com/nvidiablog",
+      "https://huggingface.co/blog/feed.xml"
+    ]
+  },
+  "topic_keywords": {
+    "AI": ["AI", "artificial intelligence", "LLM", "GPT", "Claude", "Gemini", "Llama", "機器學習", "人工智慧", "大語言模型", "transformer", "diffusion", "agent", "RAG", "fine-tune", "Hugging Face", "OpenAI", "Anthropic"],
+    "tech": ["startup", "Apple", "Google", "Meta", "Microsoft", "open source"],
+    "dev": ["GitHub", "Rust", "Python", "TypeScript", "Kubernetes", "Docker", "DevOps", "API", "framework", "library", "release"],
+    "HN": ["Show HN", "Ask HN", "Launch HN", "YC", "Y Combinator"]
+  }
+}

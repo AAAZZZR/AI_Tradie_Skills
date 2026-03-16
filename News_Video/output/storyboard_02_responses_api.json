@@ -1,0 +1,163 @@
+{
+  "source": {
+    "title": "From model to agent: Equipping the Responses API with a computer environment",
+    "source": "OpenAI News",
+    "link": "https://openai.com/index/from-model-to-agent-responses-api"
+  },
+  "en": {
+    "title": "OpenAI Just Turned Models Into Full Agents",
+    "description": "OpenAI built an agent runtime using the Responses API — with shell access, file tools, and hosted containers. Here's what that means for developers.",
+    "hashtags": ["#OpenAI", "#AIAgents", "#ResponsesAPI", "#DevTools", "#AI"],
+    "total_duration_sec": 55,
+    "slides": [
+      {
+        "id": 1,
+        "duration_sec": 7,
+        "headline": "Models Don't Just Talk Anymore",
+        "body_text": "They write code, run it, and fix their own bugs.",
+        "narration": "OpenAI just crossed a line. Their models don't just generate text anymore — they can now spin up a full computer environment, write code, execute it, read the output, and iterate. This is the Responses API, and it changes everything.",
+        "image_prompt": "Futuristic AI entity emerging from a chat window into a 3D workspace with floating terminal windows and code editors, glowing blue energy, cinematic wide shot, 16:9",
+        "background": "#0a0f1a",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 2,
+        "duration_sec": 8,
+        "headline": "What Changed?",
+        "body_text": "From chatbot to runtime",
+        "narration": "Before this, you could ask a model to write code. But it couldn't run it. Now OpenAI gives agents a shell tool, a file system, and a hosted container — a full sandbox where the agent can execute, test, and debug code autonomously.",
+        "image_prompt": "Side-by-side comparison: left shows a simple chat bubble, right shows a full IDE with terminal, file tree, and running processes, evolution arrow between them, clean tech style, 16:9",
+        "background": "#101828",
+        "text_color": "#E0E8FF"
+      },
+      {
+        "id": 3,
+        "duration_sec": 8,
+        "headline": "The Agent Loop",
+        "body_text": "Think → Code → Run → Check → Repeat",
+        "narration": "Here's how it works. The agent receives a task. It thinks about the approach, writes the code, runs it in a sandboxed container, reads the output, and if something fails — it debugs and tries again. All without human intervention.",
+        "image_prompt": "Circular workflow diagram with 5 glowing nodes: Think, Code, Execute, Evaluate, Iterate — connected by flowing energy lines, dark background with neon accents, 16:9",
+        "background": "#0d1117",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 4,
+        "duration_sec": 8,
+        "headline": "Secure by Design",
+        "body_text": "Sandboxed containers with strict boundaries",
+        "narration": "Security is baked in. Each agent runs in an isolated container. It can't access the internet unless explicitly allowed. It can't touch your files unless you grant permission. Think of it as giving the agent a locked room with only the tools it needs.",
+        "image_prompt": "Isometric view of a glowing container box with a padlock, inside shows a mini workspace with code editor, outside shows blocked arrows trying to enter, security concept, 16:9",
+        "background": "#0a1628",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 5,
+        "duration_sec": 8,
+        "headline": "What Developers Get",
+        "body_text": "One API call to deploy a coding agent",
+        "narration": "For developers, this is huge. You make one API call to the Responses API with the shell tool enabled. OpenAI handles the container, the file system, the execution environment. You just describe the task and get back the result.",
+        "image_prompt": "Minimal code snippet on a dark editor showing a single API call on the left, and a complex multi-step execution trace on the right, developer productivity concept, 16:9",
+        "background": "#1a1a2e",
+        "text_color": "#E0E0FF"
+      },
+      {
+        "id": 6,
+        "duration_sec": 8,
+        "headline": "The Competition Heats Up",
+        "body_text": "Anthropic, Google, and now OpenAI — all building agent runtimes",
+        "narration": "This puts OpenAI directly in competition with Anthropic's Claude computer use and Google's Gemini agents. The race to build the best agent runtime is officially on. And the winner will define how we build software for the next decade.",
+        "image_prompt": "Three glowing pillars representing OpenAI, Anthropic, and Google racing upward in a futuristic arena, competitive energy, dramatic lighting, 16:9",
+        "background": "#0f0a1e",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 7,
+        "duration_sec": 8,
+        "headline": "The Takeaway",
+        "body_text": "AI agents aren't coming — they're here.",
+        "narration": "The shift from model to agent is no longer theoretical. If you're a developer, start thinking in agents, not prompts. The tools are here. The infrastructure is ready. The only question is — what will you build?",
+        "image_prompt": "Sunrise over a futuristic cityscape where buildings are made of code and data streams, optimistic and forward-looking, golden hour lighting, 16:9",
+        "background": "#0d2137",
+        "text_color": "#FFFFFF"
+      }
+    ]
+  },
+  "zh": {
+    "title": "OpenAI 把模型變成了真正的 Agent",
+    "description": "OpenAI 用 Responses API 打造了 Agent 運行環境 — 有 shell、檔案系統和容器。開發者只需一個 API 呼叫就能部署程式碼代理。",
+    "hashtags": ["#OpenAI", "#AI代理", "#ResponsesAPI", "#開發工具", "#AI"],
+    "total_duration_sec": 55,
+    "slides": [
+      {
+        "id": 1,
+        "duration_sec": 7,
+        "headline": "模型不只是聊天了",
+        "body_text": "它們能寫程式、執行、還能自己除錯",
+        "narration": "OpenAI 剛跨過了一條線。他們的模型不再只是生成文字，現在可以啟動完整的電腦環境，寫程式碼、執行、讀取結果、然後迭代。這就是 Responses API，它改變了一切。",
+        "image_prompt": "Futuristic AI entity emerging from a chat window into a 3D workspace with floating terminal windows and code editors, glowing blue energy, cinematic wide shot, 16:9",
+        "background": "#0a0f1a",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 2,
+        "duration_sec": 8,
+        "headline": "改變了什麼？",
+        "body_text": "從聊天機器人到執行環境",
+        "narration": "以前你可以叫模型寫程式碼，但它沒辦法執行。現在 OpenAI 給 Agent 一個 shell 工具、一個檔案系統、一個託管容器。一個完整的沙箱，讓 Agent 可以自主執行、測試和除錯程式碼。",
+        "image_prompt": "Side-by-side comparison: left shows a simple chat bubble, right shows a full IDE with terminal, file tree, and running processes, evolution arrow between them, clean tech style, 16:9",
+        "background": "#101828",
+        "text_color": "#E0E8FF"
+      },
+      {
+        "id": 3,
+        "duration_sec": 8,
+        "headline": "Agent 循環",
+        "body_text": "思考 → 寫碼 → 執行 → 檢查 → 重複",
+        "narration": "運作方式是這樣的。Agent 收到任務，思考方法，寫程式碼，在沙箱容器裡執行，讀取輸出。如果失敗了，它自己除錯再試一次。全程不需要人類介入。",
+        "image_prompt": "Circular workflow diagram with 5 glowing nodes: Think, Code, Execute, Evaluate, Iterate — connected by flowing energy lines, dark background with neon accents, 16:9",
+        "background": "#0d1117",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 4,
+        "duration_sec": 8,
+        "headline": "安全設計",
+        "body_text": "隔離容器，嚴格邊界",
+        "narration": "安全是內建的。每個 Agent 都在隔離容器中執行。除非明確允許，否則不能上網。除非你授權，否則不能碰你的檔案。就像給 Agent 一個鎖起來的房間，裡面只有它需要的工具。",
+        "image_prompt": "Isometric view of a glowing container box with a padlock, inside shows a mini workspace with code editor, outside shows blocked arrows trying to enter, security concept, 16:9",
+        "background": "#0a1628",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 5,
+        "duration_sec": 8,
+        "headline": "開發者得到什麼",
+        "body_text": "一個 API 呼叫部署一個程式碼代理",
+        "narration": "對開發者來說，這太強了。你只要對 Responses API 發一個請求，啟用 shell 工具。OpenAI 處理容器、檔案系統、執行環境。你只要描述任務，拿回結果就好。",
+        "image_prompt": "Minimal code snippet on a dark editor showing a single API call on the left, and a complex multi-step execution trace on the right, developer productivity concept, 16:9",
+        "background": "#1a1a2e",
+        "text_color": "#E0E0FF"
+      },
+      {
+        "id": 6,
+        "duration_sec": 8,
+        "headline": "競爭白熱化",
+        "body_text": "Anthropic、Google、OpenAI 都在建 Agent 運行環境",
+        "narration": "這讓 OpenAI 直接跟 Anthropic 的 Claude Computer Use 和 Google 的 Gemini Agent 正面競爭。打造最強 Agent 運行環境的軍備競賽正式開跑。贏家將定義未來十年我們怎麼開發軟體。",
+        "image_prompt": "Three glowing pillars representing OpenAI, Anthropic, and Google racing upward in a futuristic arena, competitive energy, dramatic lighting, 16:9",
+        "background": "#0f0a1e",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 7,
+        "duration_sec": 8,
+        "headline": "重點",
+        "body_text": "AI Agent 不是未來式 — 是現在進行式",
+        "narration": "從模型到 Agent 的轉變不再是理論。如果你是開發者，開始用 Agent 的思維去想，而不是 prompt。工具到位了，基礎設施準備好了。唯一的問題是，你要建什麼？",
+        "image_prompt": "Sunrise over a futuristic cityscape where buildings are made of code and data streams, optimistic and forward-looking, golden hour lighting, 16:9",
+        "background": "#0d2137",
+        "text_color": "#FFFFFF"
+      }
+    ]
+  }
+}
