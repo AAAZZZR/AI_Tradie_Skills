@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-一條龍影片生成：讀取 storyboard JSON → 生成音頻 → 生成圖片 → ffmpeg 合成
+一條龍影片生成：讀取 storyboard JSON → 生成圖片(nano-banana-pro) → 生成音頻(edge-tts) → ffmpeg 合成
 用法: python3 generate_video.py --storyboard ../output/storyboard_01.json --lang zh --output ../output/video_01/
 """
 import asyncio
@@ -10,7 +10,6 @@ import subprocess
 import sys
 import argparse
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
 
 
 # ── 設定 ──────────────────────────────────────────────
@@ -20,23 +19,98 @@ VOICE_MAP = {
     "en": "en-US-GuyNeural",
 }
 
-SIZES = {
-    "16x9": (1920, 1080),
-    "9x16": (1080, 1920),
+NANO_BANANA_SCRIPT = "/app/skills/nano-banana-pro/scripts/generate_image.py"
+
+ASPECT_RATIO_MAP = {
+    "16x9": "16:9",
+    "9x16": "9:16",
 }
 
-# 嘗試找中文字型
-FONT_PATHS = [
-    "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-]
+
+# ── 圖片生成（nano-banana-pro）────────────────────────
+
+def generate_images_ai(slides, img_dir, ratio="16x9"):
+    """使用 nano-banana-pro (Gemini) 生成分鏡圖片"""
+    img_dir.mkdir(parents=True, exist_ok=True)
+    aspect = ASPECT_RATIO_MAP.get(ratio, "16:9")
+    
+    for slide in slides:
+        prompt = slide.get("image_prompt", "")
+        if not prompt:
+            # fallback: 用 headline + body_text 組合
+            prompt = f"{slide.get('headline', '')}. {slide.get('body_text', '')}. Dark cinematic style, digital illustration"
+        
+        filename = f"image_{slide['id']:02d}.png"
+        out_path = img_dir / filename
+        
+        cmd = [
+            "uv", "run", NANO_BANANA_SCRIPT,
+            "--prompt", prompt,
+            "--filename", str(out_path),
+            "--resolution", "1K",
+            "--aspect-ratio", aspect
+        ]
+        
+        print(f"  🖼️ Slide {slide['id']}: 生成中...")
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+            if result.returncode == 0 and out_path.exists():
+                print(f"     ✅ {filename}")
+            else:
+                print(f"     ❌ 失敗: {result.stderr[:200] if result.stderr else 'unknown error'}")
+                # fallback to pillow
+                print(f"     ⚠️ 使用 Pillow fallback")
+                generate_image_fallback(slide, img_dir, ratio)
+        except subprocess.TimeoutExpired:
+            print(f"     ❌ 超時，使用 Pillow fallback")
+            generate_image_fallback(slide, img_dir, ratio)
+
+
+# ── Pillow Fallback ──────────────────────────────────
+
+def generate_image_fallback(slide, img_dir, ratio="16x9"):
+    """Pillow 文字卡片 fallback"""
+    from PIL import Image, ImageDraw, ImageFont
+    
+    SIZES = {"16x9": (1920, 1080), "9x16": (1080, 1920)}
+    FONT_PATHS = [
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    ]
+    
+    w, h = SIZES.get(ratio, (1920, 1080))
+    bg_hex = slide.get("background", "#1a1a2e").lstrip("#")
+    bg = tuple(int(bg_hex[i:i+2], 16) for i in (0, 2, 4))
+    tc_hex = slide.get("text_color", "#FFFFFF").lstrip("#")
+    text_color = tuple(int(tc_hex[i:i+2], 16) for i in (0, 2, 4))
+    
+    img = Image.new("RGB", (w, h), bg)
+    draw = ImageDraw.Draw(img)
+    
+    # 找字型
+    font = ImageFont.load_default()
+    for fp in FONT_PATHS:
+        if os.path.exists(fp):
+            try:
+                font = ImageFont.truetype(fp, size=int(h * 0.065))
+                break
+            except:
+                continue
+    
+    headline = slide.get("headline", "")
+    bbox = draw.textbbox((0, 0), headline, font=font)
+    tw = bbox[2] - bbox[0]
+    draw.text(((w - tw) / 2, h * 0.35), headline, font=font, fill=text_color)
+    
+    out_path = img_dir / f"image_{slide['id']:02d}.png"
+    img.save(out_path, "PNG")
 
 
 # ── TTS ───────────────────────────────────────────────
 
 async def generate_audio(slides, lang, audio_dir):
-    """為每張 slide 生成旁白音頻"""
+    """使用 edge-tts 生成旁白音頻"""
     import edge_tts
     
     voice = VOICE_MAP.get(lang, VOICE_MAP["en"])
@@ -53,101 +127,6 @@ async def generate_audio(slides, lang, audio_dir):
         print(f"  🎙️ Slide {slide['id']}: {out_path.name}")
     
     return True
-
-
-# ── 圖片生成 ─────────────────────────────────────────
-
-def hex_to_rgb(hex_color):
-    hex_color = hex_color.lstrip("#")
-    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
-
-
-def find_font(size):
-    for fp in FONT_PATHS:
-        if os.path.exists(fp):
-            try:
-                return ImageFont.truetype(fp, size=size)
-            except:
-                continue
-    return ImageFont.load_default()
-
-
-def wrap_text_pixels(draw, text, font, max_width):
-    """按像素寬度斷行"""
-    words = list(text)  # 逐字（中文）
-    lines = []
-    current = ""
-    
-    for char in words:
-        test = current + char
-        bbox = draw.textbbox((0, 0), test, font=font)
-        if bbox[2] - bbox[0] > max_width and current:
-            lines.append(current)
-            current = char
-        else:
-            current = test
-    if current:
-        lines.append(current)
-    return lines
-
-
-def draw_slide(slide, size):
-    w, h = size
-    bg = hex_to_rgb(slide.get("background", "#1a1a2e"))
-    text_color = hex_to_rgb(slide.get("text_color", "#FFFFFF"))
-    
-    img = Image.new("RGB", (w, h), bg)
-    draw = ImageDraw.Draw(img)
-    
-    # 頂部裝飾線
-    accent = (100, 149, 237)
-    draw.rectangle([0, 0, w, int(h * 0.006)], fill=accent)
-    
-    # 底部裝飾線
-    draw.rectangle([0, h - int(h * 0.006), w, h], fill=accent)
-    
-    headline_font = find_font(int(h * 0.065))
-    body_font = find_font(int(h * 0.035))
-    
-    # 標題
-    headline = slide.get("headline", "")
-    max_text_w = int(w * 0.8)
-    headline_lines = wrap_text_pixels(draw, headline, headline_font, max_text_w)
-    
-    y = int(h * 0.3)
-    for line in headline_lines:
-        bbox = draw.textbbox((0, 0), line, font=headline_font)
-        tw = bbox[2] - bbox[0]
-        draw.text(((w - tw) / 2, y), line, font=headline_font, fill=text_color)
-        y += int(h * 0.085)
-    
-    # 副標
-    body = slide.get("body_text", "")
-    body_lines = wrap_text_pixels(draw, body, body_font, max_text_w)
-    y += int(h * 0.03)
-    body_color = tuple(int(c * 0.7) for c in text_color)
-    for line in body_lines:
-        bbox = draw.textbbox((0, 0), line, font=body_font)
-        tw = bbox[2] - bbox[0]
-        draw.text(((w - tw) / 2, y), line, font=body_font, fill=body_color)
-        y += int(h * 0.05)
-    
-    # 頁碼
-    page_text = f"{slide.get('id', '')}"
-    draw.text((int(w * 0.05), int(h * 0.92)), page_text, font=body_font, fill=body_color)
-    
-    return img
-
-
-def generate_images(slides, img_dir, ratio="16x9"):
-    size = SIZES[ratio]
-    img_dir.mkdir(parents=True, exist_ok=True)
-    
-    for slide in slides:
-        img = draw_slide(slide, size)
-        out_path = img_dir / f"image_{slide['id']:02d}.png"
-        img.save(out_path, "PNG")
-        print(f"  🖼️ Slide {slide['id']}: {out_path.name}")
 
 
 # ── FFmpeg 合成 ──────────────────────────────────────
@@ -221,16 +200,16 @@ def run(storyboard_path, lang, output_dir, ratio="16x9"):
     print(f"   語言: {lang} | 比例: {ratio} | Slides: {len(slides)}")
     print("=" * 50)
     
-    # Step 1: TTS
-    print("\n🎙️ 生成配音...")
+    # Step 1: AI 圖片生成
+    print(f"\n🖼️ 生成圖片 (nano-banana-pro, {ratio})...")
+    generate_images_ai(slides, img_dir, ratio)
+    
+    # Step 2: TTS 配音
+    print("\n🎙️ 生成配音 (edge-tts)...")
     asyncio.run(generate_audio(slides, lang, audio_dir))
     
-    # Step 2: 圖片
-    print(f"\n🖼️ 生成圖片 ({ratio})...")
-    generate_images(slides, img_dir, ratio)
-    
     # Step 3: 合成每張 clip
-    print("\n🎞️ 合成片段...")
+    print("\n🎞️ 合成片段 (ffmpeg)...")
     clips = []
     total_dur = 0
     for slide in slides:

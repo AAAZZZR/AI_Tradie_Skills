@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Inter:wght@400;600;800&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Noto Sans TC', 'Inter', sans-serif;
+    background: linear-gradient(135deg, {{bg_start}} 0%, {{bg_mid}} 40%, {{bg_end}} 100%);
+    color: #fff;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  
+  /* 頂部裝飾線 */
+  .accent-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, {{accent}}, {{accent_light}});
+  }
+  
+  /* 標籤 */
+  .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: {{accent_light}};
+    font-size: 18px;
+    font-weight: 600;
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    letter-spacing: 1px;
+    width: fit-content;
+  }
+  
+  .headline {
+    font-size: 68px;
+    font-weight: 900;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .subtitle {
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    margin-bottom: 40px;
+  }
+  
+  /* 條列重點 */
+  .bullets {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+  
+  .bullets li {
+    font-size: 26px;
+    color: rgba(255,255,255,0.75);
+    padding: 12px 0;
+    padding-left: 32px;
+    position: relative;
+    line-height: 1.4;
+  }
+  
+  .bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: {{accent}};
+  }
+  
+  /* 底部 */
+  .footer {
+    position: absolute;
+    bottom: 40px;
+    left: 100px;
+    right: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .source {
+    font-size: 16px;
+    color: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .source-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: {{accent}};
+  }
+  
+  .slide-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.12);
+    font-family: 'Inter', monospace;
+  }
+  
+  /* 裝飾 */
+  .deco {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .deco-1 { width: 400px; height: 400px; top: -120px; right: -80px; }
+  .deco-2 { width: 250px; height: 250px; bottom: -60px; right: 200px; }
+  .deco-3 { width: 150px; height: 150px; top: 200px; right: 120px; border-color: {{accent}}22; }
+</style>
+</head>
+<body>
+  <div class="accent-bar"></div>
+  <div class="deco deco-1"></div>
+  <div class="deco deco-2"></div>
+  <div class="deco deco-3"></div>
+  
+  <span class="tag">{{tag}}</span>
+  <h1 class="headline">{{headline}}</h1>
+  <p class="subtitle">{{subtitle}}</p>
+  
+  <ul class="bullets">
+    {{bullets}}
+  </ul>
+  
+  <div class="footer">
+    <div class="source">
+      <span class="source-dot"></span>
+      <span>{{source}}</span>
+    </div>
+    <span class="slide-num">{{slide_num}}</span>
+  </div>
+</body>
+</html>
