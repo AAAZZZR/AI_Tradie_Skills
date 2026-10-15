@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="poster.css">
+<style>
+  .col h3 { font-family: var(--display); font-weight: 800; font-size: 40px; text-transform: uppercase; line-height: 1; }
+  .col.you { color: var(--muted); }
+  .col.you h3 { color: var(--white); }
+  .col.ai { background: var(--card); color: var(--ink); border-color: var(--card); }
+  .col.ai h3 { color: var(--ink); }
+  .col.ai .label { color: var(--ink-muted); }
+  .col ul { font-size: 27px; gap: 16px; }
+  .col li::before { top: 15px; }
+  .col.ai li::before { background: var(--hivis); height: 6px; top: 14px; }
+  h1.launch { font-size: 104px; }
+  .dm { display: flex; flex-direction: column; gap: 14px; }
+  .dm .bubble { max-width: none; font-size: 30px; line-height: 1.35; font-weight: 500; }
+  .dm .bubble b { color: var(--hivis); font-weight: 700; }
+</style>
+</head>
+<body>
+  <div class="stripe"></div>
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-mark">AI</div>
+      <div class="brand-name">TRADIE</div>
+      <div class="brand-side">Brisbane · SEQ</div>
+    </div>
+
+    <h1 class="launch">AI can't swing<br>a hammer.<span class="hl">It can do<br>your paperwork.</span></h1>
+
+    <div class="cols">
+      <div class="panel col you">
+        <span class="label">Still your job</span>
+        <h3>On the tools</h3>
+        <ul>
+          <li>Getting up on the roof</li>
+          <li>Doing the job right</li>
+          <li>Talking to customers</li>
+        </ul>
+      </div>
+      <div class="panel col ai">
+        <span class="label">Hand it to AI</span>
+        <h3>The paperwork</h3>
+        <ul>
+          <li>Typing up supplier invoices</li>
+          <li>Matching receipts to jobs</li>
+          <li>Chasing late payments</li>
+          <li>Updating the calendar</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="dm push">
+      <div class="bubble in"><small>DM me</small>Tell me the admin job you hate most. <b>I'll tell you straight if AI can take it.</b></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="stripe"></div>
+    <div class="footer-bar">
+      <b>AI TRADIE</b>
+      <span>No pitch. Just a straight answer.</span>
+    </div>
+  </div>
+</body>
+</html>
