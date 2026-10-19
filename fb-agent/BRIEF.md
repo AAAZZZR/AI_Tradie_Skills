@@ -52,9 +52,11 @@
 | 看粉絲數 | `bash fb-agent/scripts/fb.sh page` |
 | 發圖文 | `bash fb-agent/scripts/fb.sh post caption.txt poster.png` |
 | 發純文字 | `bash fb-agent/scripts/fb.sh post-text caption.txt` |
+| 發影片 | `bash fb-agent/scripts/fb.sh post-video caption.txt video.mp4 "標題"`，之後用 `fb.sh video <id>` 看轉檔狀態 |
 | HTML 海報轉 PNG | `bash fb-agent/scripts/render.sh poster.html poster.png`（預設 1080×1350） |
 
 - 粉專權杖存在雲端環境的 network secret，送往 `graph.facebook.com` 的請求會自動帶上，你不需要、也看不到 token。
+  影片上傳走 `graph-video.facebook.com`，network secret 的 Allowed websites 要一起列這個網域。
 - 海報用 HTML 自己做。`fb-agent/examples/` 是 10/14 發的第一篇（海報 HTML、CSS、文案），想沿用這個樣式或換掉都可以。
   網頁字型只能用 Google Fonts。
 - 第一次渲染時如果機器上沒有 Chrome，`render.sh` 會自己下載。渲染失敗就改發純文字，並在回報裡說明原因。

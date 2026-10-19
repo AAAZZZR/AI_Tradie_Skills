@@ -25,6 +25,8 @@ usage() {
   fb.sh page                          粉專名稱與粉絲數
   fb.sh post <caption.txt> <image>    發圖文（caption 檔的內容就是貼文內文）
   fb.sh post-text <caption.txt>       發純文字
+  fb.sh post-video <caption.txt> <video.mp4> [標題]   發影片
+  fb.sh video <video_id>              一支影片的處理狀態與連結
 EOF
 }
 
@@ -51,6 +53,16 @@ case "${1:-}" in
   post-text)
     [[ -f "${2:-}" ]] || { usage; exit 1; }
     call -X POST "$API/$PAGE_ID/feed" --data-urlencode "message@$2"
+    ;;
+  post-video)
+    # 影片要傳到 graph-video.facebook.com，不是 graph.facebook.com
+    [[ -f "${2:-}" && -f "${3:-}" ]] || { usage; exit 1; }
+    call -X POST "https://graph-video.facebook.com/v21.0/$PAGE_ID/videos" \
+      -F "description=<$2" -F "title=${4:-}" -F "source=@$3"
+    ;;
+  video)
+    [[ -n "${2:-}" ]] || { usage; exit 1; }
+    call -G "$API/$2" --data-urlencode "fields=id,title,permalink_url,published,status,created_time"
     ;;
   *)
     usage
