@@ -23,7 +23,8 @@ usage() {
   fb.sh recent [N]                    最近 N 篇貼文（預設 15）：id、時間、內文、連結
   fb.sh stats <post_id>               一篇貼文的讚、留言、分享、觀看、點擊
   fb.sh page                          粉專名稱與粉絲數
-  fb.sh post <caption.txt> <image>    發圖文（caption 檔的內容就是貼文內文）
+  fb.sh post <caption.txt> <image> [ISO 時間]   發圖文（caption 檔的內容就是貼文內文；給時間就排程）
+  fb.sh scheduled                     列出已排程、還沒發出的貼文
   fb.sh post-text <caption.txt>       發純文字
   fb.sh post-video <caption.txt> <video.mp4> [標題]   發影片
   fb.sh video <video_id>              一支影片的處理狀態與連結
@@ -48,7 +49,15 @@ case "${1:-}" in
     ;;
   post)
     [[ -f "${2:-}" && -f "${3:-}" ]] || { usage; exit 1; }
-    call -X POST "$API/$PAGE_ID/photos" -F "message=<$2" -F "source=@$3"
+    sched=()
+    if [[ -n "${4:-}" ]]; then
+      # 排程：FB 要求至少 10 分鐘後、75 天內；時間用 ISO 8601（例如 2026-10-25T19:30:00+10:00）
+      sched=(-F "published=false" -F "scheduled_publish_time=$(date -d "$4" +%s)")
+    fi
+    call -X POST "$API/$PAGE_ID/photos" -F "message=<$2" -F "source=@$3" "${sched[@]}"
+    ;;
+  scheduled)
+    call -G "$API/$PAGE_ID/scheduled_posts" --data-urlencode "fields=id,scheduled_publish_time,message"
     ;;
   post-text)
     [[ -f "${2:-}" ]] || { usage; exit 1; }

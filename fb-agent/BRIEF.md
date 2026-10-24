@@ -51,6 +51,8 @@
 | 看一篇的成效 | `bash fb-agent/scripts/fb.sh stats <post_id>` |
 | 看粉絲數 | `bash fb-agent/scripts/fb.sh page` |
 | 發圖文 | `bash fb-agent/scripts/fb.sh post caption.txt poster.png` |
+| 排程圖文 | `bash fb-agent/scripts/fb.sh post caption.txt poster.png 2026-10-25T19:30:00+10:00`（至少 10 分鐘後） |
+| 看已排程的貼文 | `bash fb-agent/scripts/fb.sh scheduled`（排程中的也算「最近貼文」，別重複題材） |
 | 發純文字 | `bash fb-agent/scripts/fb.sh post-text caption.txt` |
 | 發影片 | `bash fb-agent/scripts/fb.sh post-video caption.txt video.mp4 "標題"`，之後用 `fb.sh video <id>` 看轉檔狀態 |
 | HTML 海報轉 PNG | `bash fb-agent/scripts/render.sh poster.html poster.png`（預設 1080×1350） |
