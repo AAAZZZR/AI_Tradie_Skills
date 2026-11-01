@@ -14,6 +14,11 @@ find_chrome() {
     echo "$CHROME_PATH"
     return
   fi
+  # Windows（Git Bash）的標準安裝位置
+  if [[ -x "/c/Program Files/Google/Chrome/Application/chrome.exe" ]]; then
+    echo "/c/Program Files/Google/Chrome/Application/chrome.exe"
+    return
+  fi
   for name in google-chrome google-chrome-stable chromium chromium-browser chrome-headless-shell; do
     if command -v "$name" >/dev/null 2>&1; then
       command -v "$name"

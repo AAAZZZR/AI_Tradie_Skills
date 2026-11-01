@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 # AI Tradie 粉專的 Graph API 小工具。
-# 雲端環境裡粉專權杖存成 network secret：proxy 會替送往 graph.facebook.com 的請求加上
-# "Authorization: Bearer <token>"，這支程式碰不到 token。本機測試時改用環境變數 FB_TOKEN。
+# token 的來源依序是：環境變數 FB_TOKEN、本機的 ../MyFB/.env（跟這個 repo 同一層）。
+# 兩個都沒有時不帶 token：雲端環境的 network secret 會由 proxy 替請求加上 Authorization。
 set -euo pipefail
 
 PAGE_ID="985495464653087"
 API="https://graph.facebook.com/v21.0"
+
+ENV_FILE="$(cd "$(dirname "$0")/../../.." && pwd)/MyFB/.env"
+if [[ -z "${FB_TOKEN:-}" && -f "$ENV_FILE" ]]; then
+  FB_TOKEN=$(grep '^LONG_META_page_TOKEN=' "$ENV_FILE" | cut -d= -f2- | tr -d "'\"")
+fi
 
 auth=()
 if [[ -n "${FB_TOKEN:-}" ]]; then
@@ -28,6 +33,7 @@ usage() {
   fb.sh post-text <caption.txt>       發純文字
   fb.sh post-video <caption.txt> <video.mp4> [標題]   發影片
   fb.sh video <video_id>              一支影片的處理狀態與連結
+  fb.sh video-stats <video_id>        一支影片的播放次數、平均觀看毫秒、讚、留言
 EOF
 }
 
@@ -68,6 +74,11 @@ case "${1:-}" in
     [[ -f "${2:-}" && -f "${3:-}" ]] || { usage; exit 1; }
     call -X POST "https://graph-video.facebook.com/v21.0/$PAGE_ID/videos" \
       -F "description=<$2" -F "title=${4:-}" -F "source=@$3"
+    ;;
+  video-stats)
+    [[ -n "${2:-}" ]] || { usage; exit 1; }
+    call -G "$API/$2" --data-urlencode "fields=views,likes.summary(true).limit(0),comments.summary(true).limit(0)"
+    call -G "$API/$2/video_insights" --data-urlencode "metric=fb_reels_total_plays,post_video_avg_time_watched"
     ;;
   video)
     [[ -n "${2:-}" ]] || { usage; exit 1; }
