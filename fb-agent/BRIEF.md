@@ -72,7 +72,7 @@
   網頁字型只能用 Google Fonts。
 - 第一次渲染時如果機器上沒有 Chrome，`render.sh` 會自己下載。渲染失敗就改發純文字，並在回報裡說明原因。
 - 找題材可以用 WebSearch。
-- **影片**：用 `lemo-opuscar` skill 做，library 在 `~/lemo-opuscar`，專案放 `~/lemo-opuscar/films/<名稱>/`（不用它的發問環節，自己定案）。一部片要 30–60 分鐘、用掉很多額度，所以**最多一週一支**，而且要有圖文做不到的理由；其他天都發圖文。
+- **影片（只在本機做，雲端只發圖文）**：用 `lemo-opuscar` skill 做，library 在 `~/lemo-opuscar`，專案放 `~/lemo-opuscar/films/<名稱>/`（不用它的發問環節，自己定案）。一部片要 30–60 分鐘、用掉很多額度，所以**最多一週一支**，而且要有圖文做不到的理由；其他天都發圖文。
   Windows 注意事項：Python 用 `.venv/Scripts/python.exe`（不是 `.venv/bin/python`）；`tools/fetch.sh` 要加 `PATH="$HOME/lemo-opuscar/.winbin:$PATH"`；faster-whisper 要先用 soundfile 讀成陣列再轉錄。範例專案：`~/lemo-opuscar/films/ai-tradie-intro/`。
 
 ## 建議流程（不是硬規定）
@@ -86,7 +86,7 @@
 
 ## 出錯時
 
-- `fb.sh` 回傳 401、190 或 OAuth 錯誤：token 失效或沒設好。**停止**，不要一直重試，在回報裡寫清楚。
+- `fb.sh` 回傳 401、403、190、OAuth 錯誤，或「Provide valid app ID」：token 失效或沒設好（雲端就是 network secret 沒設好）。**停止**，不要一直重試，在回報裡寫清楚。
 - 發文失敗就不要換別的方法硬發（例如自己組其他 API 請求）。回報錯誤訊息就好。
 
 ## 回報格式
